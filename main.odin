@@ -35,7 +35,6 @@ main :: proc() {
     amadaa_intro.logo = amadaa_logo
     state: DemoState = amadaa_intro
    
-
     for !rl.WindowShouldClose() {
         switch &s in state {
         case AmadaaIntroState:
