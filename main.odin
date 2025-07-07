@@ -11,6 +11,7 @@ MIDY :: SCREEN_HEIGHT/2
 
 AmadaaIntroState :: struct {
     logo: rl.Texture,
+    height: i32,
 }
 
 TitleScreenState :: struct {
@@ -40,7 +41,9 @@ main :: proc() {
         case AmadaaIntroState:
             amadaa_intro_input(&s)
             if amadaa_intro_update(&s) {
-                
+                title_screen := TitleScreenState{}
+                title_screen.logo = osz_logo
+                state = title_screen
             }
 
         case TitleScreenState:
