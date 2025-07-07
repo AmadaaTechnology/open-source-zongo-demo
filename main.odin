@@ -10,13 +10,10 @@ MIDX :: SCREEN_WIDTH/2
 MIDY :: SCREEN_HEIGHT/2
 
 AmadaaIntroState :: struct {
-    initialized: bool,
     logo: rl.Texture,
-    done: bool,
 }
 
 TitleScreenState :: struct {
-    initialized: bool,
     logo: rl.Texture,
 }
 
@@ -33,25 +30,20 @@ main :: proc() {
     osz_logo := rl.LoadTexture("osz-logo.png")
     amadaa_logo := rl.LoadTexture("amadaa-logo.png")
 
-    state: DemoState = AmadaaIntroState{} 
+    amadaa_intro := AmadaaIntroState{}
+    amadaa_intro.logo = amadaa_logo
+    state: DemoState = amadaa_intro
+   
 
     for !rl.WindowShouldClose() {
         switch &s in state {
         case AmadaaIntroState:
-            if !s.initialized {
-                s.logo = amadaa_logo
-                s.initialized = true
-            }
-
             amadaa_intro_input(&s)
-            amadaa_intro_update(&s)
+            if amadaa_intro_update(&s) {
+                
+            }
 
         case TitleScreenState:
-            if !s.initialized {
-                s.logo = osz_logo
-                s.initialized = true
-            }
-
             title_screen_input(&s)
             title_screen_update(&s)
         }

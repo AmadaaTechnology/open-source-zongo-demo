@@ -6,8 +6,8 @@ amadaa_intro_input :: proc(state: ^AmadaaIntroState) {
 
 }
 
-amadaa_intro_update :: proc(state: ^AmadaaIntroState) {
-
+amadaa_intro_update :: proc(state: ^AmadaaIntroState) -> bool {
+    return false
 }
 
 amadaa_intro_draw :: proc(state: ^AmadaaIntroState) {
