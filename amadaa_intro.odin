@@ -32,8 +32,12 @@ amadaa_intro_update :: proc(state: ^AmadaaIntroState) -> bool {
         state.logo_zoom *= 1.07
         if state.logo_zoom > 1 {
             state.logo_zoom = 1
-            state.step = .FADE_OUT
+            state.step = .FINAL_COUNTER
         }
+    case .FINAL_COUNTER:
+        state.final_counter += 1
+        if state.final_counter > 1000 do state.step = .FADE_OUT
+
     case .FADE_OUT:
         if state.fade_counter <= 0 {
             state.fade_counter += 5

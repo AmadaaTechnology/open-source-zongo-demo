@@ -13,6 +13,7 @@ AmadaaIntroSteps :: enum {
     FADE_IN_MSG1,
     FADE_IN_MSG2,
     ZOOM_IN_LOGO,
+    FINAL_COUNTER,
     FADE_OUT,
 }
 
@@ -29,6 +30,7 @@ AmadaaIntroState :: struct {
     msg2_counter: i32,
     msg1_color: rl.Color,
     msg2_color: rl.Color,
+    final_counter: i32,
     done: bool,
 }
 
