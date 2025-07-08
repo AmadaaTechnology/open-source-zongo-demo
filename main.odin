@@ -11,6 +11,7 @@ MIDY :: SCREEN_HEIGHT/2
 
 AmadaaIntroState :: struct {
     logo: rl.Texture,
+    logo_zoom: f32,
     height: i32,
 }
 
@@ -28,11 +29,12 @@ main :: proc() {
     rl.InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE)
     rl.SetTargetFPS(60)
 
-    osz_logo := rl.LoadTexture("osz-logo.png")
-    amadaa_logo := rl.LoadTexture("amadaa-logo.png")
+    osz_logo := rl.LoadTexture("res/osz-logo.png")
+    amadaa_logo := rl.LoadTexture("res/amadaa-logo.png")
 
     amadaa_intro := AmadaaIntroState{}
     amadaa_intro.logo = amadaa_logo
+    amadaa_intro.logo_zoom = 0.01
     state: DemoState = amadaa_intro
    
     for !rl.WindowShouldClose() {
