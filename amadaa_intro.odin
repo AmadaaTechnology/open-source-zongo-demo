@@ -13,14 +13,12 @@ amadaa_intro_update :: proc(state: ^AmadaaIntroState) -> bool {
         state.height += 1
     }
 
-    //state.height += 1
     if state.height > SCREEN_HEIGHT do return true
     return false
 }
 
 amadaa_intro_draw :: proc(state: ^AmadaaIntroState) {
     rl.ClearBackground(rl.BLACK)
-    //rl.DrawTexture(state.logo, MIDX - state.logo.width/2, MIDY - state.logo.width/2, rl.WHITE)
     iw := f32(state.logo.width)
     ih := f32(state.logo.height)
     w := iw * state.logo_zoom
