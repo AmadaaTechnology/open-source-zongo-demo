@@ -4,7 +4,9 @@ import "core:math"
 import rl "vendor:raylib"
 
 amadaa_intro_input :: proc(state: ^AmadaaIntroState) {
-
+    if rl.IsMouseButtonPressed(rl.MouseButton.LEFT) && state.step != .FADE_OUT {
+        state.step = .FADE_OUT
+    }
 }
 
 amadaa_intro_update :: proc(state: ^AmadaaIntroState) -> bool {
@@ -15,14 +17,14 @@ amadaa_intro_update :: proc(state: ^AmadaaIntroState) -> bool {
         state.msg1_counter += 3
         if state.msg1_counter > 0 && state.msg1_counter <= 255 {
             c := u8(state.msg1_counter)
-            state.msg1_color = {c, c, c, 255}
+            state.msg1_color = {c, c, c, 150}
         }
         if state.msg1_counter > 255 do state.step = .FADE_IN_MSG2
     case .FADE_IN_MSG2:
         state.msg2_counter += 3
         if state.msg2_counter > 0 && state.msg2_counter < 255 {
             c := u8(state.msg2_counter)
-            state.msg2_color = {c, c, c, 255}
+            state.msg2_color = {c, c, c, 150}
         }
         if state.msg2_counter > 255 do state.step = .ZOOM_IN_LOGO
 
@@ -34,7 +36,7 @@ amadaa_intro_update :: proc(state: ^AmadaaIntroState) -> bool {
         }
     case .FADE_OUT:
         if state.fade_counter <= 0 {
-            //state.fade_counter += 5
+            state.fade_counter += 5
         } else if state.fade_counter > 0 && state.fade_counter <= 255 {
             state.fade_counter *= 1.05
             a := u8(state.fade_counter)
@@ -66,8 +68,7 @@ amadaa_intro_draw :: proc(state: ^AmadaaIntroState) {
         src := rl.Rectangle{0, 0, iw, ih}
         dest := rl.Rectangle{x, y, iw, ih}
         origin := rl.Vector2{iw/2, ih/2}
-        //rl.DrawTexture(state.ghana_flag_map, i32(x), i32(y), {c, c, c, 255})
-        rl.DrawTexturePro(state.ghana_flag_map, src, dest, origin, state.ghana_flag_map_rot+f32(i*2), {c, c, c, 255})
+        rl.DrawTexturePro(state.ghana_flag_map, src, dest, origin, state.ghana_flag_map_rot+f32(i*3), {c, c, c, 255})
     }
 
     iw := f32(state.logo.width)
@@ -86,6 +87,6 @@ amadaa_intro_draw :: proc(state: ^AmadaaIntroState) {
     src := rl.Rectangle{0, 0, iw, ih}
     dest := rl.Rectangle{MIDX, MIDY, w, h}
     origin := rl.Vector2{w/2, h/2}
-    rl.DrawTexturePro(state.logo, src, dest, origin, 0, rl.WHITE)
+    rl.DrawTexturePro(state.logo, src, dest, origin, 0, {255, 255, 255, 150})
     rl.DrawRectangleV({0, 0}, {SCREEN_WIDTH, SCREEN_HEIGHT}, state.fade_color)
 }
