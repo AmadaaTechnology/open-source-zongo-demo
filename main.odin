@@ -9,10 +9,25 @@ WINDOW_TITLE :: "Open Source Zongo"
 MIDX :: SCREEN_WIDTH/2
 MIDY :: SCREEN_HEIGHT/2
 
+AmadaaIntroSteps :: enum {
+    FADE_IN_MSG1,
+    FADE_IN_MSG2,
+    ZOOM_IN_LOGO,
+    FADE_OUT,
+}
+
 AmadaaIntroState :: struct {
+    step: AmadaaIntroSteps,
     logo: rl.Texture,
     logo_zoom: f32,
-    height: i32,
+    fade_counter: f32,
+    fade_color: rl.Color,
+    font: rl.Font,
+    msg1_counter: i32,
+    msg2_counter: i32,
+    msg1_color: rl.Color,
+    msg2_color: rl.Color,
+    done: bool,
 }
 
 TitleScreenState :: struct {
@@ -31,10 +46,16 @@ main :: proc() {
 
     osz_logo := rl.LoadTexture("res/osz-logo.png")
     amadaa_logo := rl.LoadTexture("res/amadaa-logo.png")
+    friendly_sans := rl.LoadFontEx("res/FriendlySans.ttf", 60, nil, 0)
 
     amadaa_intro := AmadaaIntroState{}
     amadaa_intro.logo = amadaa_logo
     amadaa_intro.logo_zoom = 0.01
+    amadaa_intro.font = friendly_sans
+    amadaa_intro.msg1_counter = -20
+    amadaa_intro.msg2_counter = -20
+    amadaa_intro.fade_counter = -100
+    amadaa_intro.fade_color = {255, 255, 255, 0}
     state: DemoState = amadaa_intro
    
     for !rl.WindowShouldClose() {
@@ -64,6 +85,7 @@ main :: proc() {
         rl.EndDrawing()
     }
 
+    rl.UnloadFont(friendly_sans)
     rl.UnloadTexture(osz_logo)
     rl.UnloadTexture(amadaa_logo)
     rl.CloseWindow()
