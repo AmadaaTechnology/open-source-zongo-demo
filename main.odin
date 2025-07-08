@@ -18,6 +18,8 @@ AmadaaIntroSteps :: enum {
 
 AmadaaIntroState :: struct {
     step: AmadaaIntroSteps,
+    ghana_flag_map: rl.Texture,
+    ghana_flag_map_rot: f32,
     logo: rl.Texture,
     logo_zoom: f32,
     fade_counter: f32,
@@ -46,10 +48,12 @@ main :: proc() {
 
     osz_logo := rl.LoadTexture("res/osz-logo.png")
     amadaa_logo := rl.LoadTexture("res/amadaa-logo.png")
+    ghana_flag_map := rl.LoadTexture("res/ghana-flag-map.png")
     friendly_sans := rl.LoadFontEx("res/FriendlySans.ttf", 60, nil, 0)
 
     amadaa_intro := AmadaaIntroState{}
     amadaa_intro.logo = amadaa_logo
+    amadaa_intro.ghana_flag_map = ghana_flag_map
     amadaa_intro.logo_zoom = 0.01
     amadaa_intro.font = friendly_sans
     amadaa_intro.msg1_counter = -20
@@ -88,6 +92,7 @@ main :: proc() {
     rl.UnloadFont(friendly_sans)
     rl.UnloadTexture(osz_logo)
     rl.UnloadTexture(amadaa_logo)
+    rl.UnloadTexture(ghana_flag_map)
     rl.CloseWindow()
 }
 

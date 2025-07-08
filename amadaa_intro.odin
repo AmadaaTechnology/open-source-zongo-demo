@@ -1,5 +1,6 @@
 package main
 
+import "core:math"
 import rl "vendor:raylib"
 
 amadaa_intro_input :: proc(state: ^AmadaaIntroState) {
@@ -7,6 +8,8 @@ amadaa_intro_input :: proc(state: ^AmadaaIntroState) {
 }
 
 amadaa_intro_update :: proc(state: ^AmadaaIntroState) -> bool {
+    state.ghana_flag_map_rot += 1
+
     switch state.step {
     case .FADE_IN_MSG1:
         state.msg1_counter += 3
@@ -31,7 +34,7 @@ amadaa_intro_update :: proc(state: ^AmadaaIntroState) -> bool {
         }
     case .FADE_OUT:
         if state.fade_counter <= 0 {
-            state.fade_counter += 5
+            //state.fade_counter += 5
         } else if state.fade_counter > 0 && state.fade_counter <= 255 {
             state.fade_counter *= 1.05
             a := u8(state.fade_counter)
@@ -49,6 +52,24 @@ amadaa_intro_update :: proc(state: ^AmadaaIntroState) -> bool {
 
 amadaa_intro_draw :: proc(state: ^AmadaaIntroState) {
     rl.ClearBackground(rl.BLACK)
+
+    t := f32(rl.GetTime()) * 0.5
+
+    for i in 0..<15 {
+        d := f32(i) * 0.03
+        c := u8(15*i)
+        iw := f32(state.ghana_flag_map.width)
+        ih := f32(state.ghana_flag_map.height)
+
+        x := MIDX + 500 * math.sin(3.0 * (t+d) + math.PI/2)
+        y := MIDY + 300 * math.sin(4.0 * (t+d))
+        src := rl.Rectangle{0, 0, iw, ih}
+        dest := rl.Rectangle{x, y, iw, ih}
+        origin := rl.Vector2{iw/2, ih/2}
+        //rl.DrawTexture(state.ghana_flag_map, i32(x), i32(y), {c, c, c, 255})
+        rl.DrawTexturePro(state.ghana_flag_map, src, dest, origin, state.ghana_flag_map_rot+f32(i*2), {c, c, c, 255})
+    }
+
     iw := f32(state.logo.width)
     ih := f32(state.logo.height)
     ts1 := rl.MeasureTextEx(state.font, "AN", 60, 1)
