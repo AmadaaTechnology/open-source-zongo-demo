@@ -49,7 +49,7 @@ amadaa_intro_update :: proc(state: ^AmadaaIntroState) -> bool {
             state.bottom_msg_dir *= -1
             state.bottom_msg_index += 1
 
-            if state.bottom_msg_index > 3 do state.step = .FINAL_COUNTER
+            if state.bottom_msg_index > 4 do state.step = .FINAL_COUNTER
         }
 
     case .FINAL_COUNTER:
@@ -123,6 +123,10 @@ amadaa_intro_draw :: proc(state: ^AmadaaIntroState) {
         rl.DrawTextureV(state.odin_logo, {MIDX-tw.x/2 - f32(state.odin_logo.width) - 50, SCREEN_HEIGHT-70}, {text_color, text_color, text_color, text_color})
         rl.DrawTextureV(state.raylib_logo, {MIDX+tw.x/2 + 50, SCREEN_HEIGHT-70}, {text_color, text_color, text_color, text_color})
     case 3:
+        tw := rl.MeasureTextEx(state.font, "Proudly made in Ghana", 60, 1)
+        rl.DrawTextPro(state.font, "Proudly made in Ghana", {MIDX-tw.x/2, SCREEN_HEIGHT-70.0}, {0, 0}, 0, 60, 1, {0, text_color, 0, text_color})
+
+    case 4:
         tw := rl.MeasureTextEx(state.font, "Click left mouse button to begin", 60, 1)
         rl.DrawTextPro(state.font, "Click left mouse button to begin", {MIDX-tw.x/2, SCREEN_HEIGHT-70.0}, {0, 0}, 0, 60, 1, {0, text_color, 0, text_color})
     }
