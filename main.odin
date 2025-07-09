@@ -13,6 +13,7 @@ AmadaaIntroSteps :: enum {
     FADE_IN_MSG1,
     FADE_IN_MSG2,
     ZOOM_IN_LOGO,
+    BOTTOM_MESSAGES,
     FINAL_COUNTER,
     FADE_OUT,
 }
@@ -22,6 +23,8 @@ AmadaaIntroState :: struct {
     ghana_flag_map: rl.Texture,
     ghana_flag_map_rot: f32,
     logo: rl.Texture,
+    odin_logo: rl.Texture,
+    raylib_logo: rl.Texture,
     logo_zoom: f32,
     fade_counter: f32,
     fade_color: rl.Color,
@@ -30,6 +33,10 @@ AmadaaIntroState :: struct {
     msg2_counter: i32,
     msg1_color: rl.Color,
     msg2_color: rl.Color,
+    bottom_msg_index: i32,
+    bottom_msg_counter: i32,
+    bottom_msg: cstring,
+    bottom_msg_dir: i32,
     final_counter: i32,
     done: bool,
 }
@@ -51,10 +58,14 @@ main :: proc() {
     osz_logo := rl.LoadTexture("res/osz-logo.png")
     amadaa_logo := rl.LoadTexture("res/amadaa-logo.png")
     ghana_flag_map := rl.LoadTexture("res/ghana-flag-map.png")
+    odin_logo := rl.LoadTexture("res/odin-logo.png")
+    raylib_logo := rl.LoadTexture("res/raylib-logo.png")
     friendly_sans := rl.LoadFontEx("res/FriendlySans.ttf", 60, nil, 0)
 
     amadaa_intro := AmadaaIntroState{}
     amadaa_intro.logo = amadaa_logo
+    amadaa_intro.odin_logo = odin_logo
+    amadaa_intro.raylib_logo = raylib_logo
     amadaa_intro.ghana_flag_map = ghana_flag_map
     amadaa_intro.logo_zoom = 0.01
     amadaa_intro.font = friendly_sans

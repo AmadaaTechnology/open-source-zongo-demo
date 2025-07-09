@@ -32,8 +32,26 @@ amadaa_intro_update :: proc(state: ^AmadaaIntroState) -> bool {
         state.logo_zoom *= 1.07
         if state.logo_zoom > 1 {
             state.logo_zoom = 1
-            state.step = .FINAL_COUNTER
+            state.step = .BOTTOM_MESSAGES
+            state.bottom_msg_index = 1
+            state.bottom_msg_dir = 1
         }
+    
+    case .BOTTOM_MESSAGES:
+        state.bottom_msg_counter += state.bottom_msg_dir
+        if state.bottom_msg_counter > 400 {
+            state.bottom_msg_counter = 400
+            state.bottom_msg_dir *= -1
+        }
+
+        if state.bottom_msg_counter <= 0 {
+            state.bottom_msg_counter = 0
+            state.bottom_msg_dir *= -1
+            state.bottom_msg_index += 1
+
+            if state.bottom_msg_index > 3 do state.step = .FINAL_COUNTER
+        }
+
     case .FINAL_COUNTER:
         state.final_counter += 1
         if state.final_counter > 1000 do state.step = .FADE_OUT
@@ -45,7 +63,7 @@ amadaa_intro_update :: proc(state: ^AmadaaIntroState) -> bool {
             state.fade_counter *= 1.05
             a := u8(state.fade_counter)
             state.fade_color.a = a
-        } 
+        }
 
         if state.fade_counter > 255 {
             state.fade_counter = 255
@@ -93,4 +111,19 @@ amadaa_intro_draw :: proc(state: ^AmadaaIntroState) {
     origin := rl.Vector2{w/2, h/2}
     rl.DrawTexturePro(state.logo, src, dest, origin, 0, {255, 255, 255, 150})
     rl.DrawRectangleV({0, 0}, {SCREEN_WIDTH, SCREEN_HEIGHT}, state.fade_color)
+
+    text_color := u8(state.bottom_msg_counter > 255 ? 255 : state.bottom_msg_counter)
+    switch state.bottom_msg_index {
+    case 1:
+        tw := rl.MeasureTextEx(state.font, "Coding by Lorenzo Cabrini", 60, 1)
+        rl.DrawTextPro(state.font, "Coding by Lorenzo Cabrini", {MIDX-tw.x/2, SCREEN_HEIGHT-70.0}, {0, 0}, 0, 60, 1, {0, text_color, 0, text_color})
+    case 2:
+        tw := rl.MeasureTextEx(state.font, "Made with Odin + Raylib", 60, 1)
+        rl.DrawTextPro(state.font, "Made with Odin + Raylib", {MIDX-tw.x/2, SCREEN_HEIGHT-70.0}, {0, 0}, 0, 60, 1, {0, text_color, 0, 255})
+        rl.DrawTextureV(state.odin_logo, {MIDX-tw.x/2 - f32(state.odin_logo.width) - 50, SCREEN_HEIGHT-70}, {text_color, text_color, text_color, text_color})
+        rl.DrawTextureV(state.raylib_logo, {MIDX+tw.x/2 + 50, SCREEN_HEIGHT-70}, {text_color, text_color, text_color, text_color})
+    case 3:
+        tw := rl.MeasureTextEx(state.font, "Click left mouse button to begin", 60, 1)
+        rl.DrawTextPro(state.font, "Click left mouse button to begin", {MIDX-tw.x/2, SCREEN_HEIGHT-70.0}, {0, 0}, 0, 60, 1, {0, text_color, 0, text_color})
+    }
 }
