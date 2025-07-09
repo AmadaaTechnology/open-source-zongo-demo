@@ -54,6 +54,7 @@ main :: proc() {
     rl.SetConfigFlags({.VSYNC_HINT})
     rl.InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE)
     rl.SetTargetFPS(60)
+    rl.InitAudioDevice()
 
     osz_logo := rl.LoadTexture("res/osz-logo.png")
     amadaa_logo := rl.LoadTexture("res/amadaa-logo.png")
@@ -61,6 +62,8 @@ main :: proc() {
     odin_logo := rl.LoadTexture("res/odin-logo.png")
     raylib_logo := rl.LoadTexture("res/raylib-logo.png")
     friendly_sans := rl.LoadFontEx("res/FriendlySans.ttf", 60, nil, 0)
+    music := rl.LoadMusicStream("res/ootd-upbeat-summer-house.mp3")
+    rl.PlayMusicStream(music)
 
     amadaa_intro := AmadaaIntroState{}
     amadaa_intro.logo = amadaa_logo
@@ -76,6 +79,7 @@ main :: proc() {
     state: DemoState = amadaa_intro
    
     for !rl.WindowShouldClose() {
+        rl.UpdateMusicStream(music)
         switch &s in state {
         case AmadaaIntroState:
             amadaa_intro_input(&s)
@@ -102,10 +106,13 @@ main :: proc() {
         rl.EndDrawing()
     }
 
+    rl.StopMusicStream(music)
+    rl.CloseAudioDevice()
     rl.UnloadFont(friendly_sans)
     rl.UnloadTexture(osz_logo)
     rl.UnloadTexture(amadaa_logo)
     rl.UnloadTexture(ghana_flag_map)
+    rl.UnloadMusicStream(music)
     rl.CloseWindow()
 }
 
