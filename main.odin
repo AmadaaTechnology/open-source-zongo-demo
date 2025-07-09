@@ -1,5 +1,6 @@
 package main
 
+import "core:fmt"
 import rl "vendor:raylib"
 
 SCREEN_WIDTH :: 1024
@@ -42,12 +43,22 @@ AmadaaIntroState :: struct {
 }
 
 TitleScreenState :: struct {
-    logo: rl.Texture,
+    //logo: rl.Texture,
+    particles: [dynamic]Particle,
 }
 
 DemoState :: union {
     AmadaaIntroState,
     TitleScreenState,
+}
+
+Particle :: struct {
+    pos: rl.Vector2,
+    color: rl.Color,
+    dest_color: rl.Color,
+    v: rl.Vector2,
+    dest: rl.Vector2,
+    counter: i32,
 }
 
 main :: proc() {
@@ -56,7 +67,7 @@ main :: proc() {
     rl.SetTargetFPS(60)
     rl.InitAudioDevice()
 
-    osz_logo := rl.LoadTexture("res/osz-logo.png")
+    osz_logo := rl.LoadImage("res/osz-logo.png")
     amadaa_logo := rl.LoadTexture("res/amadaa-logo.png")
     ghana_flag_map := rl.LoadTexture("res/ghana-flag-map.png")
     odin_logo := rl.LoadTexture("res/odin-logo.png")
@@ -78,14 +89,36 @@ main :: proc() {
     amadaa_intro.fade_color = {255, 255, 255, 0}
     state: DemoState = amadaa_intro
    
+    title_screen := TitleScreenState{}
+    colors := rl.LoadImageColors(osz_logo)
+    oszw := osz_logo.width
+    oszh := osz_logo.height
+    for i: i32 = 0; i < osz_logo.width * osz_logo.height; i += 1 {
+        //if colors[i].a == 0 do continue
+        p := Particle{}
+        p.pos.x = f32(rl.GetRandomValue(0, SCREEN_WIDTH))
+        p.pos.y = f32(rl.GetRandomValue(0, SCREEN_HEIGHT))
+        p.color = rl.WHITE
+        p.dest_color = colors[i]
+        p.v.x = f32(rl.GetRandomValue(-5, 5)) 
+        if p.v.x == 0 do p.v.x = 10
+        p.v.y = f32(rl.GetRandomValue(-5, 5))
+        if p.v.y == 0 do p.v.x = -10
+        p.counter = rl.GetRandomValue(300, 500)
+        //if p.v.x == 0 && p.v.y == 0 do p.v = {-1, 3}
+        p.dest.x = f32(i % oszw) + MIDX - f32(oszw/2)
+        p.dest.y = 100 + f32(i / oszw)
+        append(&title_screen.particles, p)
+    }
+
     for !rl.WindowShouldClose() {
         rl.UpdateMusicStream(music)
         switch &s in state {
         case AmadaaIntroState:
             amadaa_intro_input(&s)
             if amadaa_intro_update(&s) {
-                title_screen := TitleScreenState{}
-                title_screen.logo = osz_logo
+                //title_screen := TitleScreenState{}
+                //title_screen.logo = osz_logo
                 state = title_screen
             }
 
@@ -109,7 +142,7 @@ main :: proc() {
     rl.StopMusicStream(music)
     rl.CloseAudioDevice()
     rl.UnloadFont(friendly_sans)
-    rl.UnloadTexture(osz_logo)
+    rl.UnloadImage(osz_logo)
     rl.UnloadTexture(amadaa_logo)
     rl.UnloadTexture(ghana_flag_map)
     rl.UnloadMusicStream(music)
