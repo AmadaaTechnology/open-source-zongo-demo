@@ -99,7 +99,6 @@ main :: proc() {
     oszw := osz_logo.width
     oszh := osz_logo.height
     for i: i32 = 0; i < osz_logo.width * osz_logo.height; i += 1 {
-        //if colors[i].a == 0 do continue
         p := Particle{}
         p.pos.x = f32(rl.GetRandomValue(0, SCREEN_WIDTH))
         p.pos.y = f32(rl.GetRandomValue(0, SCREEN_HEIGHT))
@@ -110,7 +109,6 @@ main :: proc() {
         p.v.y = f32(rl.GetRandomValue(-5, 5))
         if p.v.y == 0 do p.v.x = -10
         p.counter = rl.GetRandomValue(300, 500)
-        //if p.v.x == 0 && p.v.y == 0 do p.v = {-1, 3}
         p.dest.x = f32(i % oszw) + MIDX - f32(oszw/2)
         p.dest.y = 100 + f32(i / oszw)
         append(&title_screen.particles, p)
@@ -122,8 +120,6 @@ main :: proc() {
         case AmadaaIntroState:
             amadaa_intro_input(&s)
             if amadaa_intro_update(&s) {
-                //title_screen := TitleScreenState{}
-                //title_screen.logo = osz_logo
                 state = title_screen
             }
 
