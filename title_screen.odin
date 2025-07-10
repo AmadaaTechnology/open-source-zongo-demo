@@ -75,4 +75,8 @@ title_screen_draw :: proc(state: ^TitleScreenState) {
     for i := 0; i < len(state.particles); i += 1 {
         rl.DrawPixelV(state.particles[i].pos, state.particles[i].color)    
     }
+
+    if state.step >= .MISSION {
+        rl.DrawText("MISSION", 400, 400, 30, rl.BLACK)
+    }
 }
