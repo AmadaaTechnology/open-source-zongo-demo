@@ -42,8 +42,13 @@ AmadaaIntroState :: struct {
     done: bool,
 }
 
+TitleScreenSteps :: enum {
+    TITLE,
+    MISSION,
+}
+
 TitleScreenState :: struct {
-    //logo: rl.Texture,
+    step: TitleScreenSteps,
     particles: [dynamic]Particle,
 }
 

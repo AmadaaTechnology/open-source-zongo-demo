@@ -9,6 +9,15 @@ title_screen_input :: proc(state: ^TitleScreenState) {
 }
 
 title_screen_update :: proc(state: ^TitleScreenState) {
+    switch state.step {
+    case .TITLE:
+        osz_title_update(state)
+    case .MISSION:
+    
+    }
+}
+
+osz_title_update :: proc(state: ^TitleScreenState) {
     done := true
     for i := 0; i < len(state.particles); i += 1 {
         if state.particles[i].v != {0, 0} do done = false
@@ -55,8 +64,6 @@ title_screen_update :: proc(state: ^TitleScreenState) {
             state.particles[i].v = {0, 0}
         }
     }
-
-    if done do fmt.println("Done")
 }
 
 title_screen_draw :: proc(state: ^TitleScreenState) {
