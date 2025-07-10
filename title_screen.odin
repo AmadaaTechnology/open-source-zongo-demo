@@ -10,10 +10,12 @@ title_screen_input :: proc(state: ^TitleScreenState) {
 
 title_screen_update :: proc(state: ^TitleScreenState) {
     switch state.step {
+    case .SETUP:
+        osz_title_setup(state)
     case .TITLE:
         osz_title_update(state)
     case .MISSION:
-         
+    case TEARDOWN:
     }
 }
 
@@ -77,6 +79,7 @@ title_screen_draw :: proc(state: ^TitleScreenState) {
     }
 
     if state.step >= .MISSION {
-        rl.DrawText("MISSION", 400, 400, 30, rl.BLACK)
+        fmt.println("here")
+        rl.DrawTextPro(state.font, "Foobar", {MIDX, MIDY}, {0, 0}, 0, 72, 1, rl.BLACK)
     }
 }

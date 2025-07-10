@@ -43,13 +43,17 @@ AmadaaIntroState :: struct {
 }
 
 TitleScreenSteps :: enum {
+    SETUP,
     TITLE,
     MISSION,
+    TEARDOWN,
 }
 
 TitleScreenState :: struct {
     step: TitleScreenSteps,
     particles: [dynamic]Particle,
+    font: rl.Font,
+    mission_texture: rl.Texture,
 }
 
 DemoState :: union {
@@ -78,6 +82,7 @@ main :: proc() {
     odin_logo := rl.LoadTexture("res/odin-logo.png")
     raylib_logo := rl.LoadTexture("res/raylib-logo.png")
     friendly_sans := rl.LoadFontEx("res/FriendlySans.ttf", 60, nil, 0)
+    league_gothic := rl.LoadFontEx("res/LeagueGothic-Regular.ttf", 72, nil, 0)
     music := rl.LoadMusicStream("res/ootd-upbeat-summer-house.mp3")
     rl.PlayMusicStream(music)
 
@@ -96,6 +101,7 @@ main :: proc() {
    
     title_screen := TitleScreenState{}
     colors := rl.LoadImageColors(osz_logo)
+    title_screen.font = league_gothic
     oszw := osz_logo.width
     oszh := osz_logo.height
     for i: i32 = 0; i < osz_logo.width * osz_logo.height; i += 1 {
@@ -143,6 +149,7 @@ main :: proc() {
     rl.StopMusicStream(music)
     rl.CloseAudioDevice()
     rl.UnloadFont(friendly_sans)
+    rl.UnloadFont(league_gothic)
     rl.UnloadImage(osz_logo)
     rl.UnloadTexture(amadaa_logo)
     rl.UnloadTexture(ghana_flag_map)
