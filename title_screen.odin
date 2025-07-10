@@ -13,7 +13,7 @@ title_screen_update :: proc(state: ^TitleScreenState) {
     case .TITLE:
         osz_title_update(state)
     case .MISSION:
-    
+         
     }
 }
 
@@ -25,6 +25,7 @@ osz_title_update :: proc(state: ^TitleScreenState) {
         if state.particles[i].color.r > state.particles[i].dest_color.r do state.particles[i].color.r -= 1
         if state.particles[i].color.g > state.particles[i].dest_color.g do state.particles[i].color.g -= 1
         if state.particles[i].color.b > state.particles[i].dest_color.b do state.particles[i].color.b -= 1
+
         if state.particles[i].color.a > state.particles[i].dest_color.a do state.particles[i].color.a -= 1
         if state.particles[i].counter > 0 do state.particles[i].counter -= 1
 
@@ -64,11 +65,12 @@ osz_title_update :: proc(state: ^TitleScreenState) {
             state.particles[i].v = {0, 0}
         }
     }
+
+    if done do state.step = .MISSION
 }
 
 title_screen_draw :: proc(state: ^TitleScreenState) {
     rl.ClearBackground(rl.WHITE)
-    //rl.DrawTexture(state.logo, 0, 0, rl.WHITE)
 
     for i := 0; i < len(state.particles); i += 1 {
         rl.DrawPixelV(state.particles[i].pos, state.particles[i].color)    
