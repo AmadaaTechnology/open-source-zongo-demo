@@ -46,6 +46,7 @@ TitleScreenSteps :: enum {
     SETUP,
     TITLE,
     MISSION,
+    VISION,
     TEARDOWN,
 }
 
@@ -54,6 +55,9 @@ TitleScreenState :: struct {
     particles: [dynamic]Particle,
     font: rl.Font,
     mission_texture: rl.Texture,
+    mission_amp: f32,
+    mission_angle: f32,
+    mission_tint: rl.Color,
 }
 
 DemoState :: union {
@@ -82,7 +86,7 @@ main :: proc() {
     odin_logo := rl.LoadTexture("res/odin-logo.png")
     raylib_logo := rl.LoadTexture("res/raylib-logo.png")
     friendly_sans := rl.LoadFontEx("res/FriendlySans.ttf", 60, nil, 0)
-    league_gothic := rl.LoadFontEx("res/LeagueGothic-Regular.ttf", 72, nil, 0)
+    league_gothic := rl.LoadFontEx("res/LeagueGothic-Regular.ttf", 40, nil, 0)
     music := rl.LoadMusicStream("res/ootd-upbeat-summer-house.mp3")
     rl.PlayMusicStream(music)
 

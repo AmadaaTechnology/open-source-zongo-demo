@@ -15,8 +15,28 @@ title_screen_update :: proc(state: ^TitleScreenState) {
     case .TITLE:
         osz_title_update(state)
     case .MISSION:
-    case TEARDOWN:
+        osz_mission_update(state)
+    case .VISION:
+
+    case .TEARDOWN:
+        osz_title_teardown(state)
     }
+}
+
+osz_title_setup :: proc(state: ^TitleScreenState) {
+    s: cstring = "We are on a mission to bridge the digital literacy gap in Zongo Communities."
+    tw := rl.MeasureTextEx(state.font, s, 40, 1) 
+    image := rl.GenImageColor(i32(tw.x), i32(tw.y), rl.BLANK)
+    rl.ImageDrawTextEx(&image, state.font, s, {0, 0}, 40, 1, rl.BLACK)
+    state.mission_texture = rl.LoadTextureFromImage(image)
+    rl.UnloadImage(image)
+    state.mission_amp = 50
+    state.mission_tint = {255, 255, 255, 0}
+    state.step = .TITLE
+}
+
+osz_title_teardown :: proc(state: ^TitleScreenState) {
+    rl.UnloadTexture(state.mission_texture)
 }
 
 osz_title_update :: proc(state: ^TitleScreenState) {
@@ -71,6 +91,16 @@ osz_title_update :: proc(state: ^TitleScreenState) {
     if done do state.step = .MISSION
 }
 
+osz_mission_update :: proc(state: ^TitleScreenState) {
+    if state.mission_tint != {255, 255, 255, 255} do state.mission_tint += {0, 0, 0, 1}
+
+    state.mission_angle += 1
+    state.mission_amp -= 0.05
+    if state.mission_amp < 0 do state.mission_amp = 0
+
+    if state.mission_amp == 0 do state.step = .VISION
+}
+
 title_screen_draw :: proc(state: ^TitleScreenState) {
     rl.ClearBackground(rl.WHITE)
 
@@ -79,7 +109,11 @@ title_screen_draw :: proc(state: ^TitleScreenState) {
     }
 
     if state.step >= .MISSION {
-        fmt.println("here")
-        rl.DrawTextPro(state.font, "Foobar", {MIDX, MIDY}, {0, 0}, 0, 72, 1, rl.BLACK)
+        for i in 0..<state.mission_texture.width {
+            src := rl.Rectangle{f32(i), 0, 1, f32(state.mission_texture.height)}
+            y := MIDY+100 + state.mission_amp * math.sin((state.mission_angle+f32(i))*rl.DEG2RAD)
+            dest := rl.Vector2{MIDX-f32(state.mission_texture.width/2) + f32(i), y}
+            rl.DrawTextureRec(state.mission_texture, src, dest, state.mission_tint)
+        } 
     }
 }
